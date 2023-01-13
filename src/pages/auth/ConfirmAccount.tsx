@@ -62,7 +62,7 @@ const ConfirmAccount = () => {
   return (
     <>
       <div>
-        <h1 className="text-indigo-600 font-black text-5xl text-center">
+        <h1 className="text-indigo-600 font-black text-3xl text-center">
           Confirma tu Cuenta y Comienza a Administrar {""}
           <span className="text-black">tus Pacientes</span>
         </h1>

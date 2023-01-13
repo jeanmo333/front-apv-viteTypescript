@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import axiosClient from "../../config/axios";
 
@@ -8,7 +7,7 @@ import { useAuth } from "../../hooks/useAuth";
 import Alerta from "../../components/ui/Alert";
 import { IAlert } from "../../interfaces/alert";
 import Alert from "../../components/ui/Alert";
-
+import { CircularLoading } from "../../components/ui/CircularLoading";
 
 // type FormData = {
 //   email: string;
@@ -16,16 +15,15 @@ import Alert from "../../components/ui/Alert";
 // };
 
 const Login = () => {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState<IAlert | null>();
 
-  const { setAuth } = useAuth();
+  const { setAuth, loading, setLoading } = useAuth();
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if ([email, password].includes("")) {
@@ -34,45 +32,44 @@ const Login = () => {
         error: true,
       });
 
-      setTimeout(() =>  setAlert(null), 7000);
+      setTimeout(() => setAlert(null), 7000);
 
       return;
     }
 
     try {
+      setLoading(true);
       const { data } = await axiosClient.post("/users/login", {
         email,
         password,
       });
       localStorage.setItem("token", data.token);
       setAuth(data.user);
-     // console.log(data)
+      setLoading(false);
       navigate("/admin");
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        setLoading(false);
         setAlert({
           msg: error.response!.data.msg,
           error: true,
         });
-  
-      setTimeout(() =>  setAlert(null), 7000);
+
+        setTimeout(() => setAlert(null), 7000);
+      }
     }
   };
 
-  }
-
   return (
-
-<>
+    <>
       <div>
-        <h1 className="text-indigo-600 font-black text-4xl text-center">
+        <h1 className="text-indigo-600 font-black text-3xl text-center">
           Inicia Sesión en apv y Administra tus {""}
           <span className="text-black"> Pacientes</span>
         </h1>
       </div>
 
       <div className="mt-3 md:mt-5 shadow-lg px-5 py-5 rounded-xl bg-white">
-       
         <form onSubmit={handleSubmit}>
           <div className="my-5">
             <label className="uppercase text-gray-600 block text-xl font-bold">
@@ -99,32 +96,27 @@ const Login = () => {
             />
           </div>
 
-          <input
+          <button
             type="submit"
-            value="Iniciar Sesión"
-            className="bg-indigo-700 w-full py-3 px-10 rounded-xl text-white uppercase font-bold mt-5 hover:cursor-pointer hover:bg-indigo-800 md:w-auto "
-          />
+            className="bg-indigo-700 w-full py-3 px-10 rounded-xl text-white uppercase font-bold mt-5 hover:cursor-pointer hover:bg-indigo-800 md:w-auto ">
+            {loading ? <CircularLoading /> : "Iniciar Sesión"}
+          </button>
         </form>
 
         {alert?.msg && <Alert alert={alert} />}
 
         <nav className="mt-10 lg:flex lg:justify-between">
-          <Link
-            className="block text-center my-5 text-gray-500"
-            to="/register"
-          >
+          <Link className="block text-center my-5 text-gray-500" to="/register">
             ¿No tienes una cuenta? Regístrate
           </Link>
           <Link
             className="block text-center my-5 text-gray-500"
-            to="/forget-password"
-          >
+            to="/forget-password">
             Olvide mi Password
           </Link>
         </nav>
       </div>
     </>
-
   );
 };
 
