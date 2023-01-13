@@ -78,7 +78,7 @@ const NewPassword = () => {
           <span className="text-black">tus Pacientes</span>
         </h1>
       </div>
-      <div className="mt-20 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white">
+      <div className="mt-5 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white">
         {alert?.msg && <Alert alert={alert} />}
 
         {tokenValid && (
