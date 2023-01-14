@@ -14,7 +14,7 @@ interface ContextProps {
 
   logout: () => void;
 
-  // getUsers: () => Promise<void>;
+  getUsersByAdmin: () => Promise<void>
 
   setUsers: React.Dispatch<React.SetStateAction<IUser[]>>;
 

@@ -53,36 +53,38 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
  
 
-  // const getUsers = async () => {
-  //   setLoading(true);
-  //   const token = localStorage.getItem("token");
-  //   if (!token) {
-  //     setLoading(false);
-  //     return;
-  //   }
+  const getUsersByAdmin = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
-  //   const config = {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   };
-  //   try {
-  //     const { data } = await axiosClient.get("/auth/admin/users", config);
-  //     setUsers(data);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       Swal.fire({
-  //         position: "center",
-  //         icon: "warning",
-  //         title: error.response?.data.message,
-  //         showConfirmButton: false,
-  //         timer: 1500,
-  //       });
-  //     }
-  //   }
-  // };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      setLoading(true);
+      const { data } = await axiosClient.get("/users/admin", config);
+      setUsers(data);
+      setLoading(false);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setLoading(false);
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: error.response?.data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    }
+  };
 
   // const getUserByAdmin = async (
   //   id: string
@@ -201,13 +203,13 @@ export const AuthProvider: FC<Props> = ({ children }) => {
     try {
       setLoading(true);
       const { data } = await axiosClient.patch(
-        `/auth/admin/update-user/${user.id}`,
+        `/auth/admin/update-user/${user._id}`,
         user,
         config
       );
       const { userUpdate } = data;
       const usersEdit = users.map((userState) =>
-        userState.id === userUpdate.id ? userUpdate : userState
+        userState._id === userUpdate.id ? userUpdate : userState
       );
       setUsers(usersEdit);
 
@@ -263,7 +265,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           await axiosClient.delete(`/auth/admin/update-user/${id}`, config);
-          const usersUpdate = users.filter((userState) => userState.id !== id);
+          const usersUpdate = users.filter((userState) => userState._id !== id);
           setUsers(usersUpdate);
         }
       });
@@ -288,7 +290,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
         loading,
         dashboardData,
         // Methods
-      //  getUsers,
+        getUsersByAdmin,
         setLoading,
         checkAuth,
         setUsers,
