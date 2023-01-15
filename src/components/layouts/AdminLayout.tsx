@@ -24,7 +24,7 @@ export const AdminLayout = () => {
         <Navbar />
       </nav>
 
-      {auth?.id || token ? (
+      {auth?._id || token ? (
         <Box
           sx={{
             margin: "30px auto",
