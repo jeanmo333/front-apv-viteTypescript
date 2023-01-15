@@ -1,4 +1,4 @@
-import { AddOutlined, Delete, Edit} from "@mui/icons-material";
+import { AddOutlined, Delete, Edit } from "@mui/icons-material";
 import { Box, Button, Grid, IconButton } from "@mui/material";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useEffect } from "react";
@@ -8,7 +8,7 @@ import { useAuth } from "../../../hooks/useAuth";
 
 const UserList = () => {
   const navigate = useNavigate();
-   const { users, getUsersByAdmin, loading} = useAuth();
+  const { users, getUsersByAdmin, loading } = useAuth();
 
   const navigateTo = (url: string) => {
     navigate(url);
@@ -17,7 +17,6 @@ const UserList = () => {
   useEffect(() => {
     getUsersByAdmin();
   }, []);
-
 
   const rows = users!.map((user) => ({
     id: user._id,
@@ -45,15 +44,15 @@ const UserList = () => {
             <>
               <IconButton
                 sx={{ marginRight: 2, color: "white" }}
-               //onClick={() => navigateTo(`/admin/new-user/${row.id}`)}
-               >
+                //onClick={() => navigateTo(`/admin/new-user/${row.id}`)}
+              >
                 <Edit sx={{ color: "#FF5733", fontSize: 30 }} />
               </IconButton>
 
               <IconButton
                 sx={{ marginRight: 2 }}
-              // onClick={() => deleteUserByAdmin(row.id)}
-               >
+                // onClick={() => deleteUserByAdmin(row.id)}
+              >
                 <Delete sx={{ fontSize: 30, color: "#C70039" }} />
               </IconButton>
             </>
@@ -77,7 +76,7 @@ const UserList = () => {
           startIcon={<AddOutlined />}
           color="secondary"
           //onClick={() => navigateTo("/admin/new-user")}
-          >
+        >
           Crear usuario
         </Button>
       </Box>
